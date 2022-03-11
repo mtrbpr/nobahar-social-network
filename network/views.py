@@ -101,14 +101,15 @@ class JoinRequestAPIViewSet(ModelViewSet):
         return Response(status=status.HTTP_200_OK, data={'message': 'successfull'})
 
     def list(self, request, *args, **kwargs):
-        data = self.get_serializer(instance=request.user.join_requests.all(), many=True).data
+        data = self.get_serializer(instance=request.user.join_requests.order_by('-id').all(), many=True).data
         return Response(status=status.HTTP_200_OK, data={'joinRequests': data})
 
     @action(methods=['get'], url_path='group', detail=False)
     def group(self, request):
         if request.user.group:
             if request.user.group.owner.id == request.user.id:
-                data = self.get_serializer(instance=request.user.group.join_requests.all(), many=True).data
+                data = self.get_serializer(instance=request.user.group.join_requests.order_by('-id').all(),
+                                           many=True).data
                 return Response(status=status.HTTP_200_OK, data={'joinRequests': data})
         return Response(status=status.HTTP_400_BAD_REQUEST, data=BAD_REQUEST_BODY)
 
@@ -146,7 +147,7 @@ class ConnectionRequestAPIViewSet(ModelViewSet):
             if request.user.group.owner.id == request.user.id:
                 return Response(status=status.HTTP_200_OK,
                                 data={'requests': ConnectionRequestSerializer(
-                                    instance=request.user.group.received_requests, many=True
+                                    instance=request.user.group.received_requests.order_by('-id'), many=True
                                 ).data})
         return Response(status=status.HTTP_400_BAD_REQUEST, data=BAD_REQUEST_BODY)
 

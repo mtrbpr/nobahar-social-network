@@ -177,7 +177,7 @@ AUTH_USER_MODEL = 'network.User'
 
 SECRET_KEY = os.environ.get("SECRET_KEY", 'secret')
 DEBUG = int(os.environ.get("DEBUG", 1))
-ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", '').split(" ")
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", 'localhost').split(" ")
 DATABASES = {
   "default": {
     "ENGINE": os.environ.get("SQL_ENGINE", 'django.db.backends.postgresql'),
